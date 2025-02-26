@@ -1,0 +1,20 @@
+import sys
+
+data = sys.stdin.read().split()
+t = int(data[0])
+i = 1
+out = []
+for _ in range(t):
+    n = int(data[i])
+    i += 1
+    s = data[i]
+    i += 1
+    d = s.count('-')
+    u = s.count('_')
+    if d < 2 or u < 1:
+        out.append("0")
+    else:
+        x = d // 2
+        y = d - x
+        out.append(str(u * x * y))
+sys.stdout.write("\n".join(out))
