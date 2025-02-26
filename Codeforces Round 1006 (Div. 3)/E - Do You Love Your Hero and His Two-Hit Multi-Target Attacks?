@@ -1,0 +1,71 @@
+import sys
+
+data = sys.stdin.read().strip().split()
+
+t = int(data[0])
+ks = list(map(int, data[1:]))
+
+MAXN = 500
+tri = [0] * (MAXN + 1)
+for i in range(1, MAXN + 1):
+    tri[i] = i * (i - 1) // 2
+
+CAND = list(range(MAXN, 1, -1))
+
+out = []
+p = 0
+for _ in range(t):
+    k = ks[p]
+    p += 1
+
+    if k == 0:
+        out.append("5")
+        for i in range(5):
+            out.append(f"{10000000 + i} {10000000 + i * 10 + 7}")
+        continue
+
+    rem = k
+    cols = []
+    cap = 500
+    i_cand = 0
+    while i_cand < len(CAND) and rem:
+        x = CAND[i_cand]
+        while tri[x] <= rem and x <= cap:
+            cols.append(x)
+            rem -= tri[x]
+            cap -= x
+            if rem == 0:
+                break
+        i_cand += 1
+        if rem == 0:
+            break
+
+    sm = 2
+    while rem > 0 and sm <= cap:
+        if tri[sm] <= rem and sm <= cap:
+            cols.append(sm)
+            rem -= tri[sm]
+            cap -= sm
+        else:
+            sm += 1
+            if sm > MAXN:
+                break
+
+    if rem:
+        out.append("1")
+        out.append("0 0")
+        continue
+
+    coords = []
+    x_base = 1
+    for i, c in enumerate(cols, start=1):
+        base_y = i * 10000
+        for j in range(c):
+            coords.append((x_base, base_y + j))
+        x_base += 1
+
+    out.append(str(len(coords)))
+    for x_val, y_val in coords:
+        out.append(f"{x_val} {y_val}")
+
+sys.stdout.write("\n".join(out))
