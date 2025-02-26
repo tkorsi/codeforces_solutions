@@ -1,0 +1,17 @@
+def test(n, k, p):
+    if k == 0:
+        return 0
+    if k > n * p or k < -n * p:
+        return -1
+    T = abs(k)
+    ops = T // p
+    if T % p:
+        ops += 1
+    if ops > n:
+        return -1
+    return ops
+
+T = int(input())
+for _ in range(T):
+    n, k, p = map(int, input().split())
+    print(test(n, k, p))
