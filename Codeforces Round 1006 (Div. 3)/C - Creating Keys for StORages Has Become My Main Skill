@@ -1,0 +1,36 @@
+import sys
+
+data = sys.stdin.read().strip().split()
+
+t = int(data[0])
+i = 1
+out_lines = []
+
+for _ in range(t):
+    n = int(data[i])
+    i += 1
+    x = int(data[i])
+    i += 1
+
+    m = 0
+    while m <= n and (m & ~x) == 0:
+        m += 1
+
+    bs = min(n, m)
+    Block = list(range(bs))
+    or_val = 0
+    for a in Block:
+        or_val |= a
+
+    if or_val == x:
+        A = Block[:]
+    elif bs < n:
+        A = Block[:] + [x]
+    else:
+        A = Block[:-1] + [x]
+
+    while len(A) < n:
+        A.append(x)
+    out_lines.append(" ".join(map(str, A)))
+
+sys.stdout.write("\n".join(out_lines))
