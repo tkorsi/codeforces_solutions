@@ -1,0 +1,65 @@
+import sys
+import math
+
+MOD = 10**9 + 7
+
+def s_r(L, R):
+    return (R * (R + 1) // 2 - (L - 1) * L // 2) % MOD
+
+def s_sq(L, R):
+    return (R * (R + 1) * (2 * R + 1) // 6 - (L - 1) * L * (2 * L - 1) // 6) % MOD
+
+def revb(n, p):
+    x = n
+    r = 0
+    while x:
+        r = r * p + (x % p)
+        x //= p
+    return r
+
+d = sys.stdin.read().split()
+t = int(d[0])
+i = 1
+O = []
+
+for _ in range(t):
+    n = int(d[i])
+    k = int(d[i + 1])
+    i += 2
+
+    tot = 0
+    P = n if k >= n else k
+
+    # Part 1: For small bases p in [2, min(P, sqrt(n))]
+    r = math.isqrt(n)
+    p1 = 0
+    for p in range(2, min(P, r) + 1):
+        p1 = (p1 + revb(n, p)) % MOD
+
+    p2 = 0
+    A = r + 1
+    B = P
+    if A <= B:
+        S_total = (n % MOD) * s_r(A, B) % MOD
+        S_floor = 0
+        p_val = A
+        while p_val <= B:
+            v = n // p_val
+            q = n // v
+            if q > B:
+                q = B
+            cnt = q - p_val + 1
+            sum_sq_val = s_sq(p_val, q)
+            term = (sum_sq_val - cnt) % MOD
+            S_floor = (S_floor + (v % MOD) * term) % MOD
+            p_val = q + 1
+        p2 = (S_total - S_floor) % MOD
+
+    tot = (p1 + p2) % MOD
+
+    if k > n:
+        tot = (tot + (n % MOD) * ((k - n) % MOD)) % MOD
+
+    O.append(str(tot))
+
+sys.stdout.write("\n".join(O))
