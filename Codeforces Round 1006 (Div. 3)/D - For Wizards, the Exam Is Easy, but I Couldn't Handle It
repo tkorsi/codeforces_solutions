@@ -1,0 +1,37 @@
+import sys
+
+data = sys.stdin.read().split()
+if not data:
+    sys.exit(0)
+t = int(data[0])
+pos = 1
+out = []
+for _ in range(t):
+    n = int(data[pos])
+    pos += 1
+    A = list(map(int, data[pos:pos+n]))
+    pos += n
+
+    bd = 0
+    mid = (n + 1) // 2 - 1
+    l_best = mid
+    r_best = mid
+    for l in range(n - 1):
+        x = A[l]
+        plus = 0
+        minus = 0
+        for r in range(l + 1, n):
+            if A[r] > x:
+                plus += 1
+            elif A[r] < x:
+                minus += 1
+            dlt = plus - minus
+            if dlt < bd:
+                bd = dlt
+                l_best = l
+                r_best = r
+    if bd == 0:
+        l_best = mid
+        r_best = mid
+    out.append(f"{l_best+1} {r_best+1}")
+sys.stdout.write("\n".join(out))
