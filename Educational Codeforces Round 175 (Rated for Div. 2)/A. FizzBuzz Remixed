@@ -1,0 +1,3 @@
+for _ in range(int(input())):
+    n = int(input())
+    print(3 * (n // 15) + min(n % 15 + 1, 3))
