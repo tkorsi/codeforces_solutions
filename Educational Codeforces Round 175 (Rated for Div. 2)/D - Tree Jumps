@@ -1,0 +1,38 @@
+MOD = 998244353
+import sys
+from collections import deque
+
+data = sys.stdin.read().split()
+it = iter(data)
+t = int(next(it))
+output_lines = []
+for _ in range(t):
+    n = int(next(it))
+    parent = [0] * (n + 1)
+    children = [[] for _ in range(n + 1)]
+    for i in range(2, n + 1):
+        p = int(next(it))
+        parent[i] = p
+        children[p].append(i)
+
+    dp = [0] * (n + 1)
+    dp[1] = 1
+    total_sum = 1
+
+    q = deque([1])
+    while q:
+        level_size = len(q)
+        T = 0
+        for v in list(q):  # copy current level nodes
+            T = (T + dp[v]) % MOD
+        for _ in range(level_size):
+            v = q.popleft()
+            for u in children[v]:
+                if parent[u] == 1:
+                    dp[u] = (dp[u] + T) % MOD
+                else:
+                    dp[u] = (dp[u] + (T - dp[parent[u]])) % MOD
+                total_sum = (total_sum + dp[u]) % MOD
+                q.append(u)
+    output_lines.append(str(total_sum % MOD))
+sys.stdout.write("\n".join(output_lines))
