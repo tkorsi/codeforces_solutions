@@ -1,0 +1,55 @@
+import sys
+
+data = sys.stdin.read().split()
+it = iter(data)
+T = int(next(it))
+out = []
+d = {'L': -1, 'R': 1}
+
+
+def solve_robot_hits(n, k, x, s):
+    p = x
+    idx = 0
+    t_time = 0
+    hits = 0
+    state_map = {}
+
+    while t_time < k:
+        state = (p, idx)
+        if state in state_map:
+            t0, h0 = state_map[state]
+            cycle_len = t_time - t0
+            if cycle_len:
+                cycles = (k - t_time) // cycle_len
+                t_time += cycles * cycle_len
+                hits += cycles * (hits - h0)
+                if t_time >= k:
+                    break
+        else:
+            state_map[state] = (t_time, hits)
+
+        if idx == n:
+            if p != 0:
+                break
+            idx = 0
+            continue
+
+        p += d[s[idx]]
+        t_time += 1
+        if p == 0:
+            hits += 1
+            idx = 0
+        else:
+            idx += 1
+
+    return hits
+
+
+for _ in range(T):
+    n = int(next(it))
+    x = int(next(it))
+    k = int(next(it))
+    s = next(it)
+    out.append(str(solve_robot_hits(n, k, x, s)))
+
+sys.stdout.write("\n".join(out))
