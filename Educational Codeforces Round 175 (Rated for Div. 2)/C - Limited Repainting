@@ -1,0 +1,41 @@
+import sys
+
+data = sys.stdin.read().split()
+it = iter(data)
+t = int(next(it))
+out = []
+
+
+def check(x, s, a, n, k):
+    m = 0
+    i = 0
+    while i < n:
+        if s[i] == 'R' and a[i] > x:
+            i += 1
+            continue
+        has_SB = False
+        while i < n and not (s[i] == 'R' and a[i] > x):
+            if s[i] == 'B' and a[i] > x:
+                has_SB = True
+            i += 1
+        if has_SB:
+            m += 1
+    return m <= k
+
+
+for _ in range(t):
+    n = int(next(it))
+    k = int(next(it))
+    s = next(it)
+    a = [int(next(it)) for _ in range(n)]
+
+    low, high = 0, max(a)
+    while low < high:
+        mid = (low + high) // 2
+        if check(mid, s, a, n, k):
+            high = mid
+        else:
+            low = mid + 1
+    out.append(str(low))
+
+sys.stdout.write("\n".join(out))
