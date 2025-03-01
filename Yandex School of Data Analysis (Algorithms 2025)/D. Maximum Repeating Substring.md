@@ -1,6 +1,3 @@
-Here is the translated problem in Markdown format:
-
-```
 # D. Maximum Repeating Substring
 
 | Time Limit | 1 second |
@@ -44,4 +41,3 @@ Print the maximum possible **k**.
 ### **Output**  
 
     3  
-```
